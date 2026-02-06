@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; color: #1a1a2e; font-size: 14px; line-height: 1.7; }
+    h2 { font-size: 18px; margin: 20px 0 8px; }
+    h3 { font-size: 15px; margin: 16px 0 6px; color: #444; }
+    ul { margin: 4px 0 12px 20px; }
+    code { background: #e8eaf0; padding: 1px 5px; border-radius: 3px; font-size: 13px; }
+    .version-badge { display: inline-block; background: #1a1a2e; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin-left: 8px; }
+    .date { color: #888; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div id="changelog-content">
+    <!-- Content injected by JS to require browser rendering -->
+  </div>
+  <script>
+    // Changelog data loaded and rendered via JavaScript
+    const releases = [
+      {
+        version: "2.0.0",
+        date: "2026-01-15",
+        sections: {
+          "Breaking Changes — Authentication": [
+            "Removed <code>basic_auth()</code> — use <code>oauth_authenticate()</code> instead",
+            "<code>api_key_auth()</code> now requires a <code>scope</code> parameter",
+            "<code>AuthToken</code> has new fields: <code>refresh_token</code>, <code>scope</code>",
+            "<code>refresh_token()</code> now requires the token's <code>refresh_token</code> field"
+          ],
+          "Breaking Changes — Database": [
+            "<code>connect()</code> now takes a single <code>connection_string</code> instead of host/port/database",
+            "<code>query()</code> renamed to <code>find()</code> with new params: <code>where</code>, <code>max_results</code>, <code>cursor</code>",
+            "<code>update()</code> renamed to <code>update_one()</code>, added <code>upsert</code> parameter",
+            "<code>delete()</code> renamed to <code>delete_one()</code>",
+            "<code>insert()</code> now returns a document ID string instead of Document object"
+          ],
+          "Breaking Changes — API": [
+            "<code>CloudStoreClient</code> now requires <code>region</code> parameter",
+            "<code>delete_resource()</code> renamed to <code>delete()</code>",
+            "<code>upload_file()</code> parameter <code>file_path</code> renamed to <code>local_path</code>",
+            "All endpoints updated from <code>/v1/</code> to <code>/v2/</code>"
+          ],
+          "New Features": [
+            "Added <code>oauth_authenticate()</code> for OAuth 2.0 flows",
+            "Added <code>service_account_auth()</code> for machine-to-machine auth",
+            "Added <code>patch()</code> method for partial resource updates",
+            "Added <code>bulk_insert()</code> for batch database operations",
+            "Added <code>create_index()</code> for query optimization",
+            "Added cursor-based pagination in <code>find()</code>",
+            "Added <code>/v2/webhooks</code> endpoint"
+          ]
+        }
+      },
+      {
+        version: "1.0.0",
+        date: "2025-06-15",
+        sections: {
+          "Initial Release": [
+            "API key and basic authentication",
+            "HTTP API client with GET, POST, PUT, DELETE",
+            "Database operations: connect, query, insert, update, delete",
+            "File upload support",
+            "Utility functions for key validation and formatting"
+          ]
+        }
+      }
+    ];
+
+    function render() {
+      const container = document.getElementById("changelog-content");
+      let html = "";
+      releases.forEach(release => {
+        html += `<h2>v${release.version} <span class="version-badge">${release.version}</span></h2>`;
+        html += `<p class="date">Released: ${release.date}</p>`;
+        for (const [heading, items] of Object.entries(release.sections)) {
+          html += `<h3>${heading}</h3><ul>`;
+          items.forEach(item => { html += `<li>${item}</li>`; });
+          html += `</ul>`;
+        }
+      });
+      container.innerHTML = html;
+    }
+
+    document.addEventListener("DOMContentLoaded", render);
+  </script>
+</body>
+</html>

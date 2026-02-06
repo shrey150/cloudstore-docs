@@ -1,0 +1,102 @@
+{
+  "getting-started": {
+    "title": "Getting Started with CloudStore SDK",
+    "sections": [
+      {
+        "heading": "Installation",
+        "content": "<pre><code>pip install cloudstore-sdk</code></pre>"
+      },
+      {
+        "heading": "Quick Start",
+        "content": "<pre><code class=\"language-python\">from cloudstore.auth import api_key_auth\nfrom cloudstore.api import CloudStoreClient\n\n# Authenticate\ntoken = api_key_auth(\"cs_your_api_key_here\")\n\n# Create a client\nclient = CloudStoreClient(\n    base_url=\"https://api.cloudstore.io\",\n    api_key=\"cs_your_api_key_here\",\n    timeout=30\n)\n\n# Make a request\nresponse = client.get(\"/v1/documents\")\nprint(response.data)</code></pre>"
+      },
+      {
+        "heading": "Authentication",
+        "content": "<p>CloudStore supports two authentication methods:</p><ol><li><strong>API Key Authentication</strong> — Recommended for server-to-server communication</li><li><strong>Basic Authentication</strong> — Username and password for interactive sessions</li></ol><p>See the <a href=\"authentication.html\">Authentication Guide</a> for details.</p>"
+      },
+      {
+        "heading": "Core Modules",
+        "content": "<table><thead><tr><th>Module</th><th>Description</th></tr></thead><tbody><tr><td><code>auth</code></td><td>Authentication and token management</td></tr><tr><td><code>database</code></td><td>Direct database operations</td></tr><tr><td><code>api</code></td><td>HTTP API client</td></tr><tr><td><code>utils</code></td><td>Utility functions</td></tr></tbody></table>"
+      },
+      {
+        "heading": "Requirements",
+        "content": "<ul><li>Python 3.9+</li><li>An active CloudStore account</li><li>API key with prefix <code>cs_</code></li></ul>"
+      }
+    ]
+  },
+  "authentication": {
+    "title": "Authentication",
+    "sections": [
+      {
+        "heading": "API Key Authentication",
+        "content": "<p>The recommended method for production use. API keys start with <code>cs_</code> and are at least 20 characters long.</p><pre><code class=\"language-python\">from cloudstore.auth import api_key_auth\n\ntoken = api_key_auth(\"cs_your_api_key_here\")\nprint(token.access_token)   # \"tok_xxx\"\nprint(token.expires_in)     # 7200 (2 hours)\nprint(token.token_type)     # \"bearer\"</code></pre><h4>API Key Validation</h4><p>Use <code>validate_api_key()</code> to check key format before authenticating:</p><pre><code class=\"language-python\">from cloudstore.utils import validate_api_key\n\nvalidate_api_key(\"cs_abc123\")           # False (too short)\nvalidate_api_key(\"cs_abcdefghij12345678\")  # True\nvalidate_api_key(\"sk_wrong_prefix\")     # False</code></pre><p>Requirements:</p><ul><li>Must start with <code>cs_</code></li><li>Must be at least 20 characters</li><li>Only alphanumeric characters and underscores</li></ul>"
+      },
+      {
+        "heading": "Basic Authentication",
+        "content": "<p>For interactive sessions using username and password:</p><pre><code class=\"language-python\">from cloudstore.auth import basic_auth\n\ntoken = basic_auth(\"user@example.com\", \"password123\")\nprint(token.expires_in)  # 3600 (1 hour)</code></pre><p>Note: Basic auth tokens expire after 1 hour, while API key tokens last 2 hours.</p>"
+      },
+      {
+        "heading": "Token Refresh",
+        "content": "<p>Refresh expired tokens without re-authenticating:</p><pre><code class=\"language-python\">from cloudstore.auth import refresh_token\n\nnew_token = refresh_token(expired_token)</code></pre>"
+      },
+      {
+        "heading": "AuthToken Object",
+        "content": "<p>All authentication methods return an <code>AuthToken</code>:</p><table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>access_token</code></td><td>str</td><td>The bearer token</td></tr><tr><td><code>expires_in</code></td><td>int</td><td>Seconds until expiration</td></tr><tr><td><code>token_type</code></td><td>str</td><td>Always \"bearer\"</td></tr></tbody></table>"
+      },
+      {
+        "heading": "Error Handling",
+        "content": "<pre><code class=\"language-python\">from cloudstore.auth import basic_auth, AuthenticationError\n\ntry:\n    token = basic_auth(\"user\", \"wrong_password\")\nexcept AuthenticationError:\n    print(\"Invalid credentials\")</code></pre>"
+      }
+    ]
+  },
+  "api-reference": {
+    "title": "API Reference",
+    "sections": [
+      {
+        "heading": "Initialization",
+        "content": "<pre><code class=\"language-python\">from cloudstore.api import CloudStoreClient\n\nclient = CloudStoreClient(\n    base_url=\"https://api.cloudstore.io\",\n    api_key=\"cs_your_key\",\n    timeout=30  # seconds\n)</code></pre><table><thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>base_url</code></td><td>str</td><td>required</td><td>API base URL</td></tr><tr><td><code>api_key</code></td><td>str</td><td>required</td><td>Your CloudStore API key</td></tr><tr><td><code>timeout</code></td><td>int</td><td>30</td><td>Request timeout in seconds</td></tr></tbody></table>"
+      },
+      {
+        "heading": "Methods",
+        "content": "<h4>GET</h4><pre><code class=\"language-python\">response = client.get(\"/v1/documents\", params={\"limit\": 10})</code></pre><h4>POST</h4><pre><code class=\"language-python\">response = client.post(\"/v1/documents\", data={\"title\": \"My Doc\", \"content\": \"Hello\"})</code></pre><h4>PUT</h4><pre><code class=\"language-python\">response = client.put(\"/v1/documents/doc_123\", data={\"title\": \"Updated\"})</code></pre><h4>DELETE</h4><pre><code class=\"language-python\">response = client.delete_resource(\"/v1/documents/doc_123\")</code></pre><h4>Upload File</h4><pre><code class=\"language-python\">response = client.upload_file(\n    path=\"/v1/files\",\n    file_path=\"/path/to/file.pdf\",\n    content_type=\"application/pdf\"\n)</code></pre>"
+      },
+      {
+        "heading": "APIResponse Object",
+        "content": "<p>All methods return an <code>APIResponse</code>:</p><table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>status_code</code></td><td>int</td><td>HTTP status code</td></tr><tr><td><code>data</code></td><td>Any</td><td>Response body</td></tr><tr><td><code>headers</code></td><td>dict</td><td>Response headers</td></tr></tbody></table>"
+      },
+      {
+        "heading": "Available Endpoints",
+        "content": "<table><thead><tr><th>Endpoint</th><th>Path</th></tr></thead><tbody><tr><td>Documents</td><td><code>/v1/documents</code></td></tr><tr><td>Collections</td><td><code>/v1/collections</code></td></tr><tr><td>Users</td><td><code>/v1/users</code></td></tr><tr><td>Files</td><td><code>/v1/files</code></td></tr></tbody></table>"
+      }
+    ]
+  },
+  "database": {
+    "title": "Database Operations",
+    "sections": [
+      {
+        "heading": "Connecting",
+        "content": "<pre><code class=\"language-python\">from cloudstore.database import connect\n\nconn = connect(host=\"db.cloudstore.io\", port=5432, database=\"myapp\")</code></pre><table><thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>host</code></td><td>str</td><td>required</td><td>Database hostname</td></tr><tr><td><code>port</code></td><td>int</td><td>5432</td><td>Database port</td></tr><tr><td><code>database</code></td><td>str</td><td>\"default\"</td><td>Database name</td></tr></tbody></table>"
+      },
+      {
+        "heading": "Insert",
+        "content": "<pre><code class=\"language-python\">doc = conn.insert(\"users\", {\"name\": \"Alice\", \"email\": \"alice@example.com\"})\nprint(doc.id)          # \"doc_xxx\"\nprint(doc.collection)  # \"users\"</code></pre>"
+      },
+      {
+        "heading": "Query",
+        "content": "<pre><code class=\"language-python\">result = conn.query(\"users\", filter={\"name\": \"Alice\"}, limit=10)\nprint(result.total_count)\nfor doc in result.documents:\n    print(doc.data)</code></pre><table><thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>collection</code></td><td>str</td><td>required</td><td>Collection to query</td></tr><tr><td><code>filter</code></td><td>dict</td><td>required</td><td>Filter criteria</td></tr><tr><td><code>limit</code></td><td>int</td><td>100</td><td>Max documents to return</td></tr></tbody></table>"
+      },
+      {
+        "heading": "Update",
+        "content": "<pre><code class=\"language-python\">updated = conn.update(\"users\", \"doc_123\", {\"email\": \"newemail@example.com\"})</code></pre>"
+      },
+      {
+        "heading": "Delete",
+        "content": "<pre><code class=\"language-python\">success = conn.delete(\"users\", \"doc_123\")  # Returns True</code></pre>"
+      },
+      {
+        "heading": "Close Connection",
+        "content": "<p>Always close connections when done:</p><pre><code class=\"language-python\">conn.close()</code></pre>"
+      }
+    ]
+  }
+}

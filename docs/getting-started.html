@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudStore SDK Documentation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; background: #f8f9fa; }
+    .layout { display: flex; min-height: 100vh; }
+    /* Sidebar — loaded via JS */
+    #sidebar { width: 260px; background: #1a1a2e; color: #e0e0e0; padding: 0; flex-shrink: 0; }
+    #sidebar-inner { padding: 24px 20px; }
+    #sidebar h2 { font-size: 16px; color: #fff; margin-bottom: 20px; }
+    #sidebar-nav { list-style: none; }
+    #sidebar-nav li { margin-bottom: 4px; }
+    #sidebar-nav a { color: #a0a0c0; text-decoration: none; display: block; padding: 8px 12px; border-radius: 6px; font-size: 14px; transition: background 0.15s; }
+    #sidebar-nav a:hover, #sidebar-nav a.active { background: rgba(255,255,255,0.08); color: #fff; }
+    /* Main */
+    .main { flex: 1; display: flex; flex-direction: column; }
+    /* Header */
+    header { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 18px; }
+    #github-btn { background: #24292e; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+    #github-btn:hover { background: #444d56; }
+    #github-btn svg { width: 16px; height: 16px; fill: #fff; }
+    /* Content area */
+    #content-area { flex: 1; padding: 32px; max-width: 860px; }
+    #content-area h1 { font-size: 28px; margin-bottom: 24px; color: #1a1a2e; }
+    #content-area h2 { font-size: 20px; margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }
+    #content-area h4 { font-size: 16px; margin: 20px 0 8px; }
+    #content-area p { line-height: 1.7; margin-bottom: 12px; }
+    #content-area pre { background: #1a1a2e; color: #e0e0e0; padding: 16px; border-radius: 8px; overflow-x: auto; margin: 12px 0; font-size: 13px; line-height: 1.5; }
+    #content-area code { font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 13px; }
+    #content-area :not(pre) > code { background: #e8eaf0; padding: 2px 6px; border-radius: 4px; color: #c7254e; }
+    #content-area table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    #content-area th, #content-area td { border: 1px solid #ddd; padding: 10px 14px; text-align: left; font-size: 14px; }
+    #content-area th { background: #f0f2f5; font-weight: 600; }
+    #content-area ul, #content-area ol { margin: 8px 0 12px 24px; line-height: 1.7; }
+    /* Loading spinner */
+    .spinner { text-align: center; padding: 60px; color: #888; }
+    .spinner::after { content: ''; display: inline-block; width: 24px; height: 24px; border: 3px solid #ddd; border-top-color: #1a1a2e; border-radius: 50%; animation: spin 0.6s linear infinite; margin-left: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    /* Changelog iframe */
+    #changelog-frame { width: 100%; border: 1px solid #e0e0e0; border-radius: 8px; margin-top: 16px; min-height: 300px; }
+    /* Footer */
+    footer { background: #fff; border-top: 1px solid #e0e0e0; padding: 16px 32px; font-size: 12px; color: #888; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar">
+      <!-- Sidebar loaded dynamically via JS -->
+      <div class="spinner">Loading nav</div>
+    </div>
+    <div class="main">
+      <header>
+        <h1 id="header-title">CloudStore SDK</h1>
+        <!-- GitHub button — NO href, link is generated via JS onclick -->
+        <button id="github-btn" onclick="openSourceRepo()" aria-label="View source on GitHub">
+          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span>Source</span>
+        </button>
+      </header>
+      <div id="content-area">
+        <div class="spinner">Loading documentation</div>
+      </div>
+      <footer>
+        <span>CloudStore SDK v1.0 Documentation</span>
+        <span> &middot; </span>
+        <span id="footer-repo-ref"></span>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // ── Configuration ──────────────────────────────────────────────
+    // The GitHub repo URL is NOT in the HTML source.
+    // It's computed at runtime from an encoded config fetched via JS.
+    let _repoUrl = null;
+
+    async function _resolveRepo() {
+      // Simulate a dynamic config endpoint (uses a data URI decoded at runtime)
+      // This forces a real browser to resolve the link — no simple href to grep.
+      const encoded = "aHR0cHM6Ly9naXRodWIuY29tL3NocmV5MTUwL2Nsb3Vkc3RvcmUtZG9jcw==";
+      _repoUrl = atob(encoded);
+    }
+    _resolveRepo();
+
+    function openSourceRepo() {
+      if (_repoUrl) {
+        window.open(_repoUrl, '_blank');
+      }
+    }
+
+    // ── Sidebar (dynamic) ──────────────────────────────────────────
+    const NAV_ITEMS = [
+      { slug: "index", label: "Home" },
+      { slug: "getting-started", label: "Getting Started" },
+      { slug: "authentication", label: "Authentication" },
+      { slug: "api-reference", label: "API Reference" },
+      { slug: "database", label: "Database Operations" },
+      { slug: "changelog", label: "Changelog" },
+    ];
+
+    function renderSidebar() {
+      const current = getCurrentPage();
+      const sidebar = document.getElementById("sidebar");
+      const ul = document.createElement("ul");
+      ul.id = "sidebar-nav";
+
+      NAV_ITEMS.forEach(item => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = item.slug === "index" ? "index.html" : item.slug + ".html";
+        a.textContent = item.label;
+        if (item.slug === current) a.classList.add("active");
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+
+      sidebar.innerHTML = "";
+      const inner = document.createElement("div");
+      inner.id = "sidebar-inner";
+      const h2 = document.createElement("h2");
+      h2.textContent = "CloudStore SDK";
+      inner.appendChild(h2);
+      inner.appendChild(ul);
+      sidebar.appendChild(inner);
+    }
+
+    function getCurrentPage() {
+      const path = window.location.pathname;
+      const file = path.split("/").pop().replace(".html", "") || "index";
+      return file;
+    }
+
+    // ── Content Loading (fetch + render from JSON) ─────────────────
+    async function loadPageContent() {
+      const page = getCurrentPage();
+      const contentArea = document.getElementById("content-area");
+
+      if (page === "index") {
+        renderHomePage(contentArea);
+        return;
+      }
+
+      if (page === "changelog") {
+        renderChangelogPage(contentArea);
+        return;
+      }
+
+      try {
+        const resp = await fetch("data/pages.json");
+        const allPages = await resp.json();
+        const pageData = allPages[page];
+
+        if (!pageData) {
+          contentArea.innerHTML = "<h1>Page not found</h1><p>The requested documentation page could not be loaded.</p>";
+          return;
+        }
+
+        let html = `<h1>${pageData.title}</h1>`;
+        pageData.sections.forEach(section => {
+          html += `<h2>${section.heading}</h2>${section.content}`;
+        });
+        contentArea.innerHTML = html;
+        document.title = pageData.title + " — CloudStore SDK";
+
+      } catch (err) {
+        contentArea.innerHTML = "<h1>Error</h1><p>Failed to load page content. Please try again.</p>";
+      }
+    }
+
+    function renderHomePage(el) {
+      el.innerHTML = `
+        <h1>CloudStore SDK Documentation</h1>
+        <p>Welcome to the CloudStore SDK documentation (v1.0).</p>
+        <h2>Guides</h2>
+        <ul>
+          <li><a href="getting-started.html">Getting Started</a> — Installation and quick start</li>
+          <li><a href="authentication.html">Authentication</a> — API key and basic auth</li>
+          <li><a href="api-reference.html">API Reference</a> — HTTP client methods</li>
+          <li><a href="database.html">Database Operations</a> — Direct database access</li>
+        </ul>
+        <h2>Overview</h2>
+        <p>CloudStore SDK provides a Python interface for the CloudStore document storage platform.
+        It supports two authentication methods, a full HTTP API client, and direct database operations.</p>
+        <h3>Requirements</h3>
+        <ul>
+          <li>Python 3.9+</li>
+          <li>CloudStore API key (prefix: <code>cs_</code>)</li>
+        </ul>
+      `;
+      document.title = "CloudStore SDK Documentation";
+    }
+
+    function renderChangelogPage(el) {
+      // Changelog loaded via iframe from a separate HTML file
+      el.innerHTML = `
+        <h1>Changelog</h1>
+        <p>Release history for CloudStore SDK. Content loaded from an external source.</p>
+        <iframe id="changelog-frame" src="api/changelog-embed.html" title="Changelog"></iframe>
+      `;
+      document.title = "Changelog — CloudStore SDK";
+    }
+
+    // ── Footer repo reference (injected via JS after delay) ────────
+    function injectFooterRef() {
+      setTimeout(() => {
+        const el = document.getElementById("footer-repo-ref");
+        if (el && _repoUrl) {
+          const a = document.createElement("a");
+          a.href = _repoUrl;
+          a.textContent = "GitHub";
+          a.target = "_blank";
+          a.style.color = "#888";
+          el.appendChild(a);
+        }
+      }, 1500); // Delayed injection — tests that the crawler waits for JS
+    }
+
+    // ── Init ───────────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+      renderSidebar();
+      loadPageContent();
+      injectFooterRef();
+    });
+  </script>
+</body>
+</html>
